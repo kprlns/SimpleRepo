@@ -22,8 +22,7 @@ Recursively specified directory and
 display the full paths of subdirectories
 ./lab21 <DIR>
 	Flags:
-		-r reverse 
-		" 
+		-r reverse " 
 	shift
 	if [[ $# -eq 0 ]]; then
 	 exit 
