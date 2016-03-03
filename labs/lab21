@@ -1,68 +1,63 @@
-#!/bin/bash 
+#!/bin/bash
 REVERSE=0
+ERROR_DIR="Its not a dir
+Next you, lucky, will be.  Yes, hmmm.
+How to use my script:
+./lab21 <DIR>
+	Flags:
+	-r reverse "
 func(){
 	if [ $REVERSE -eq 0 ]; then
 		echo "$PWD"
 	fi
 	for i in `ls`; do
  		if [[ -d $i ]]; then
-		  cd ./$i
-		  func $i
-		  cd ..
+			cd ./$i
+		    func $i
+		    cd ..
 		fi
 	done
 	if [ $REVERSE -eq 1 ]; then
 		echo "$PWD"
 	fi
 }
-
 if [[ $1 = '-?' ]]; then
-	echo "	2016 MAI No.8 
+	echo "	2016 MAI No.8
 Recursively specified directory and
 display the full paths of subdirectories
 ./lab21 <DIR>
 	Flags:
-		-r reverse " 
+	-r reverse"
 	shift
 	if [[ $# -eq 0 ]]; then
-	 exit 
+		exit
 	fi
 fi
 
 if [[ $1 = '-r' ]]; then
-	echo "Reverse mod activatade" 
+	echo "Reverse mod activatade"
 	REVERSE=1
 	shift
 fi
 
-if [ $# -gt 1 ] ; then 
+if [ $# -gt 1 ] ; then
 	echo "Please enter one dir
-Thanks" 
+Thanks"
 	read a
-  	if [ -d a ]; then 
+  	if [ -d a ]; then
 		cd ./$a
 		func
 	else
-		echo "Its not a dir 
-Next you, lucky, will be.  Yes, hmmm.
-How to use my script:
-./lab21 <DIR>
-	Flags:
-	-r reverse "
+		echo "$ERROR_DIR"
 	exit
 	fi
-elif [ $# -eq 0 ]; then 
+elif [ $# -eq 0 ]; then
     func
-else 
-    if [ -d $1 ]; then 
+else
+    if [ -d $1 ]; then
         cd ./$1
-        func 
+        func
     else
-    echo "Its not a dir 
-Next you, lucky, will be.  Yes, hmmm.
-How to use my script:
-./lab21 <DIR>
-	Flags:
-	-r reverse "
+    	echo "$ERROR_DIR"
     fi
 fi
