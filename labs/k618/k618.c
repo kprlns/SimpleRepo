@@ -2,12 +2,12 @@
 #include "DT.h"
 
 int main(int args,char* arg[]){
-	
-	
-
-	test();
 	print_menu();
-
+	char c[20];
+	for(int i=0;i<20;i++){
+	printf("%s\n",names[i]);
+	}
+	
 	return 0;
 }
 
