@@ -1,7 +1,7 @@
 #pragma once
 #include <stdlib.h>
 #include <time.h>
-char names[20][20]={"Jacob","Michael","Joshua","Matthew","Ethan","Andrew","Daniel","William","Joseph","Christopher","Emily","Emma","Madison","Olivia",
+char names[20][20]={"Jacob","Michael","Joshua","Matthew","Ethan","Andrew","Daniel","William","Joseph","John","Emily","Emma","Madison","Olivia",
 "Hannah","Abigail","Isabella","Ashley","Samantha","Elizabeth"};
 
 
@@ -35,22 +35,32 @@ void generate_a_base(){
 	FILE *f;
 	srand((unsigned) time(0) );
 	printf("Please enter amount of elements:\n");
-	scanf("%d\n",&amount);
-	f=fopen("Generated_base.dat","w+b");
+	scanf("%d",&amount);
+	f=fopen("Generated_base","wb");
 	for(int i=0;i<amount;i++){
+		Person p;
+
 		int rand_names=rand()%20;
 		int group=rand()%8+1;
 		double mark=(rand()%100+1.0);
-		fprintf(f,"%s %d %f\n",names[rand_names],group,mark);
+		//fprintf(f,"%s %d %f\n",names[rand_names],group,mark);
+		fwrite(&names[rand_names],sizeof(char),1,f);
+		fwrite(&group,sizeof(int),1,f);
+		fwrite(&mark,sizeof(double),1,f);
 	}
 	fclose(f);
-
-
-
-
 }
-void read_a_base(FILE *f){
+void read_a_base(char* c[]){
+	FILE* f;
+	f=fopen(c,"rb");
+	char d[20];
+	while (true){
+		Person p;
+		fread(&p.name,1,10,f);
+		
 
+
+	}
 
 
 }

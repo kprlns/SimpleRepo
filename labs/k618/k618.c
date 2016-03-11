@@ -7,7 +7,7 @@ int main(int args,char* arg[]){
 	for(int i=0;i<20;i++){
 	printf("%s\n",names[i]);
 	}
-	
+	generate_a_base();
 	return 0;
 }
 
