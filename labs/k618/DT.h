@@ -1,7 +1,7 @@
 #pragma once
 #include <stdlib.h>
 #include <time.h>
-char names[20][20]={"Jacob","Michael","Joshua","Matthew","Ethan","Andrew","Daniel","William","Joseph","John","Emily","Emma","Madison","Olivia",
+char names[20][10]={"Jacob","Michael","Joshua","Matthew","Ethan","Andrew","Daniel","William","Joseph","John","Emily","Emma","Madison","Olivia",
 "Hannah","Abigail","Isabella","Ashley","Samantha","Elizabeth"};
 
 
@@ -29,7 +29,16 @@ void print_menu(){
 	printf("|8.     Quit                                   |\n");
 	printf("|----------------------------------------------|\n");
 }
-
+int read_a_person(char* path){
+	printf("%s\n",path);
+	FILE* f;
+	f=fopen(path,"rb");
+	if(f) printf("Succes\n");
+	Person q;
+	fread(&q,sizeof(Person),1,f);
+	printf("%s %d %f\n",q.name,q.group,q.mark);
+	return 1;
+}
 void generate_a_base(){
 	int amount;
 	FILE *f;
