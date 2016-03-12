@@ -21,9 +21,9 @@ void print_menu(){
 	printf("|----------------------------------------------|\n");
 	printf("|   		     Menu   	               |\n");
 	printf("|----------------------------------------------|\n");
-	printf("|1.	Fill the base	 		       |\n"); 
+	printf("|1.	Fill the base	 		       |\n"); // DONE
 	printf("|2.	Generate a new base	 	       |\n"); // DONE
-	printf("|3.     Add new element		  	       |\n"); 
+	printf("|3.     Add new elements		       |\n"); //TESTING
 	printf("|4.     Print the base		  	       |\n"); //DONE
 	printf("|5.	Remove the N-th element		       |\n");
 	printf("|6.	Remove all element with the same name  |\n");
@@ -79,7 +79,7 @@ void write_a_base(char* c){
 	FILE* f;
 	f=fopen(c,"rb");
 	Person p;
-	while(fread(&p,sizeof(p),1,f)){
+	while(fread(&p,sizeof(p),1,f)==1){
 
 		printf("%s %s %s %d ",p.name,p.init,p.gen,p.group);
 
@@ -116,11 +116,44 @@ void fill_the_base(char* base){
 		for(int j=0;j<4;j++){
 			p.marks[j]=2+(rand()%4);
 		}
+		fwrite(&p, sizeof(Person),1,f);
+	}
+	fclose(f);
+}
+void add_new_elements(char* base){
+	FILE* f;
+	f=fopen(base,"ab+");
+	int amount;
+	printf("Please enter amount of elements:\n");
+	scanf("%d",&amount);
+	Person p;
+	for(int i=0;i<amount;i++){
+		char name[20];
+		char initial[5];
+		char genn[3];
+		int a;
+		scanf("%s%s%s%d",name,initial,genn,&a);
+		for(int j=0;j<4;j++){
+				int x;
+				scanf("%d",&x);
+				p.marks[j]=x;
+		}
+		p.name=&name;
+		p.init=initial;
+		p.gen=genn;
+		p.group=a;
+		printf("%s %s %s %d ",p.name,p.init,p.gen,p.group);
+
+		for(int j=0;j<4;j++){
+			printf("%d ",p.marks[j]);
+		}	
+		
+		printf("\n");
+
 		fwrite(&p, sizeof(p),1,f);
 	}
 	fclose(f);
 }
-
 
 
 
