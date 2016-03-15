@@ -73,28 +73,23 @@ void remove_nth_element(char* path,int n){
 	int i=0;
 	Person q;
 	while(fread(&q,sizeof(Person),1,f)>0){
-		if(i==n){
-			i++;
-			continue;
-		}
-		else{
+		if(i!=n){
 			//fread(&q,sizeof(Person),1,f);
 			fwrite(&q,sizeof(Person),1,temp);
-		}			
-		i++;
+			i++;
+		}	else		
+	        	i++;
 	}
-
-	fclose(temp);
-	temp=fopen("temp.dat","rb");
+    rewind(temp);
 	fclose(f);
 	f=fopen(path,"wb");
 	
 	while(fread(&q,sizeof(Person),1,temp)>0){
-			fread(&q,sizeof(Person),1,temp);
 			fwrite(&q,sizeof(Person),1,f);	
 	}
 	fclose(temp);
 	fclose(f);
+	//print_a_base("temp.dat");
 	remove("temp.dat");
 	
 }
