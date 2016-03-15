@@ -24,7 +24,7 @@ void print_menu(){
 	printf("|2.	Generate a new base	 	       |\n"); // REMOVE
 	printf("|3.     Add new elements		       |\n"); //DONE
 	printf("|4.     Print the base		  	       |\n"); //DONE
-	printf("|5.	Remove the N-th element		       |\n"); //DONE ????TESTING????
+	printf("|5.	Remove the N-th element		       |\n"); //DONE
 	printf("|6.	Remove all element with the same name  |\n");
 	printf("|7.	Option 18                              |\n");
 	printf("|8.	Delete the base                        |\n");
