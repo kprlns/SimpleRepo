@@ -27,8 +27,8 @@ void print_menu(){
 	printf("|5.	Remove the N-th element		       |\n"); //DONE
 	printf("|6.	Remove all element with the same name  |\n");
 	printf("|7.	Option 18                              |\n");
-	printf("|8.	Delete the base                        |\n");
-	printf("|9.     Quit                                   |\n");
+	printf("|8.	Delete the base                        |\n"); //DONE
+	printf("|9.     Quit                                   |\n");//DONE
 	printf("|----------------------------------------------|\n");
 }
 void add_new_elements(char* path){
@@ -93,10 +93,15 @@ void remove_nth_element(char* path,int n){
 	remove("temp.dat");
 	
 }
+void erase_the_base(char* path){
+	FILE* f;
+	f=fopen(path,"w");
+	fclose(f);
+}
 
-
-
-
+void quit(){
+	exit(0);
+}
 
 
 
