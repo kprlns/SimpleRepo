@@ -31,7 +31,7 @@ void print_menu(){
 	printf("|3.     Add new elements		       |\n"); //DONE
 	printf("|4.     Print the base		  	       |\n"); //DONE
 	printf("|5.	Remove the N-th element		       |\n"); //DONE
-	printf("|6.	Remove all element with the same name  |\n");
+	printf("|6.	Remove all element with the same name  |\n");//DONE
 	printf("|7.	Option 18                              |\n");
 	printf("|8.	Delete the base                        |\n"); //DONE
 	printf("|9.     Quit                                   |\n");//DONE
@@ -49,6 +49,9 @@ void add_new_elements(char* path){
 		scanf("%s%s%s%d",&p.name,&p.initial,&p.gen,&p.group);
 		for(int j=0;j<4;j++){
 			scanf("%d",&p.marks[j]);
+			if(p.marks[j]<2 || p.marks[j]>5) {
+				p.marks[j]=2;
+			}
 		}
 		fwrite(&p,sizeof(Person),1,f);
 	}
