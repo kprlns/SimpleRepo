@@ -12,10 +12,16 @@ typedef struct Person{
 	int group;
 	int marks[4];
 }Person;
-
-void test(){
-	printf("Hi\n");
+int cmp(char* a,char* b){
+	for(int i=0;i<10;i++){
+		if(a[i]=='\0' && b[i]==a[i]) return 1;
+		if(a[i]!=b[i]) return 0;
+	}	
+	return 1;
 }
+
+
+
 void print_menu(){
 	printf("|----------------------------------------------|\n");
 	printf("|   		     Menu   	               |\n");
@@ -93,6 +99,35 @@ void remove_nth_element(char* path,int n){
 	remove("temp.dat");
 	
 }
+
+void delete_with_same_name(char* path,char* name){
+	FILE* f;
+	FILE* temp;
+	f=fopen(path,"rb");
+	temp=fopen("temp.dat","w+b");
+	Person q;
+	while(fread(&q,sizeof(Person),1,f)>0){
+		if(!cmp(q.name,&name))
+			fwrite(&q,sizeof(Person),1,f);
+	}
+    rewind(temp);
+	fclose(f);
+	f=fopen(path,"wb");
+	
+	while(fread(&q,sizeof(Person),1,temp)>0){
+			fwrite(&q,sizeof(Person),1,f);	
+	}
+	fclose(temp);
+	fclose(f);
+	//print_a_base("temp.dat");
+	remove("temp.dat");
+
+
+}
+
+
+
+
 void erase_the_base(char* path){
 	FILE* f;
 	f=fopen(path,"w");
@@ -102,10 +137,6 @@ void erase_the_base(char* path){
 void quit(){
 	exit(0);
 }
-
-
-
-
 
 
 
