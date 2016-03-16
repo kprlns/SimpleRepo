@@ -1,178 +1,153 @@
 #pragma once
 #include <stdlib.h>
 #include <time.h>
-char names[20][10]={"Jacob","Michael","Joshua","Matthew","Ethan","Andrew","Daniel","William","Joseph","John","Emily","Emma","Madison","Olivia",
+const char names[20][10]={"Jacob","Michael","Joshua","Matthew","Ethan","Andrew","Daniel","William","Joseph","John","Emily","Emma","Madison","Olivia",
 "Hannah","Abigail","Isabella","Ashley","Samantha","Elizabeth"};
 char inits[17][5]={"J.F" , "M.M","E.D","W.J","A.Q","E.A","V.P","W.A","L.A","D.C","M.A","R.V","E.L","N.E","W.Y","O.R","K.O"};
-char gen[2][2]={"M","F"};
 
 typedef struct Person{
-	char* name;
-	char* init;
-	char* gen;
+	char name[10];
+	char initial[5];
+	char gen[2];
 	int group;
 	int marks[4];
 }Person;
-
-void test(){
-	printf("Hi\n");
+int cmp(char* a,char* b){
+	for(int i=0;i<10;i++){
+		if(a[i]=='\0' && b[i]==a[i]) return 1;
+		if(a[i]!=b[i]) return 0;
+	}	
+	return 1;
 }
+
+
+
 void print_menu(){
 	printf("|----------------------------------------------|\n");
 	printf("|   		     Menu   	               |\n");
 	printf("|----------------------------------------------|\n");
-	printf("|1.	Fill the base	 		       |\n"); // DONE
-	printf("|2.	Generate a new base	 	       |\n"); // DONE
-	printf("|3.     Add new elements		       |\n"); //TESTING
+	printf("|1.	Fill the base	 		       |\n"); // REMOVE
+	printf("|2.	Generate a new base	 	       |\n"); // REMOVE
+	printf("|3.     Add new elements		       |\n"); //DONE
 	printf("|4.     Print the base		  	       |\n"); //DONE
-	printf("|5.	Remove the N-th element		       |\n");
+	printf("|5.	Remove the N-th element		       |\n"); //DONE
 	printf("|6.	Remove all element with the same name  |\n");
-	printf("|7.	Option                                 |\n");
-	printf("|8.	Delete the base                        |\n");
-	printf("|9.     Quit                                   |\n");
+	printf("|7.	Option 18                              |\n");
+	printf("|8.	Delete the base                        |\n"); //DONE
+	printf("|9.     Quit                                   |\n");//DONE
 	printf("|----------------------------------------------|\n");
 }
-int read_a_person(char* path){
-	printf("%s\n",path);
+void add_new_elements(char* path){
+	FILE* f;
+	f=fopen(path,"a+b");
+	Person p;
+	int a;
+	printf("Please enter a number of elemts:\n");
+	scanf("%d",&a);
+	//printf("%d",sizeof(p.marks));
+	for(int i=0;i<a;i++){
+		scanf("%s%s%s%d",&p.name,&p.initial,&p.gen,&p.group);
+		for(int j=0;j<4;j++){
+			scanf("%d",&p.marks[j]);
+		}
+		fwrite(&p,sizeof(Person),1,f);
+	}
+	//Person q;
+	//rewind(f);
+	//fread(&q,sizeof(Person),1,f);
+	//printf("%s %s %s",q.name,q.initial,q.gen);
+	fclose(f);
+}
+void print_a_base(char* path){
 	FILE* f;
 	f=fopen(path,"rb");
-	if(f) printf("Succes\n");
 	Person q;
-	int ans=fread(&q,sizeof(Person),1,f);
-	//printf("%s %d ",q.name,q.group);
-	/*for(int j=0;j<4;j++){
-		printf("%d ",q.marks[j]);
-	}*/
-	//printf("\n");
-	return ans;
-}
-void generate_a_base(){
-	int amount;
-	FILE *f;
-	srand( (unsigned) time(0) );
-	printf("Please enter amount of elements:\n");
-	scanf("%d",&amount);
-	f=fopen("Generated_base","wb");
-	char c[10];
-	for(int i=0;i<amount;i++){
-		Person p;
-		int rand_names=rand()%20;
-		int group=rand()%8+1;
-		int initial=rand()%17;
-		if(rand_names<10)
-			p.gen=gen[0];			
-		else
-			p.gen=gen[1];
-
-		p.name=names[rand_names];
-		p.init=inits[initial];
-		p.group=group;
+	while(fread(&q,sizeof(Person),1,f)>0){
+		printf("%s %s %s %d ",q.name,q.initial,q.gen,q.group);
 		for(int j=0;j<4;j++){
-			p.marks[j]=2+(rand()%4);
+				printf("%d ",q.marks[j]);
 		}
-		//printf("%s %d %f\n",p.name,p.group,p.mark);
-		fwrite(&p, sizeof(p),1,f);
+		printf("\n");
 	}
 	fclose(f);
 }
-void write_a_base(char* c){
+void remove_nth_element(char* path,int n){
 	FILE* f;
-	f=fopen(c,"rb");
-	Person p;
-	while(fread(&p,sizeof(p),1,f)==1){
-
-		printf("%s %s %s %d ",p.name,p.init,p.gen,p.group);
-
-		for(int j=0;j<4;j++){
-			printf("%d ",p.marks[j]);
-		}
-
-		printf("\n");
+	FILE* temp;
+	f=fopen(path,"rb");
+	temp=fopen("temp.dat","w+b");
+	int i=0;
+	Person q;
+	while(fread(&q,sizeof(Person),1,f)>0){
+		if(i!=n){
+			//fread(&q,sizeof(Person),1,f);
+			fwrite(&q,sizeof(Person),1,temp);
+			i++;
+		}	else		
+	        	i++;
 	}
-}
-
-void fill_the_base(char* base){
-	int amount;
-	FILE *f;
-	srand( (unsigned) time(0) );
-	printf("Please enter amount of elements:\n");
-	scanf("%d",&amount);
-	f=fopen(base,"a+b");
-	char c[10];
-	for(int i=0;i<amount;i++){
-		Person p;
-		int rand_names=rand()%20;
-		int group=rand()%8+1;
-		int initial=rand()%17;
-
-		if(rand_names<10)
-			p.gen=gen[0];			
-		else
-			p.gen=gen[1];
-
-		p.name=names[rand_names];
-		p.init=inits[initial];
-		p.group=group;
-		for(int j=0;j<4;j++){
-			p.marks[j]=2+(rand()%4);
-		}
-		fwrite(&p, sizeof(Person),1,f);
-	}
+    rewind(temp);
 	fclose(f);
-}
-void add_new_elements(char* base){
-	FILE* f;
-	f=fopen(base,"ab+");
-	int amount;
-	printf("Please enter amount of elements:\n");
-	scanf("%d",&amount);
-	Person p;
-	for(int i=0;i<amount;i++){
-		char name[20];
-		char initial[5];
-		char genn[3];
-		int a;
-		scanf("%s%s%s%d",name,initial,genn,&a);
-		for(int j=0;j<4;j++){
-				int x;
-				scanf("%d",&x);
-				p.marks[j]=x;
-		}
-		p.name=&name;
-		p.init=initial;
-		p.gen=genn;
-		p.group=a;
-		printf("%s %s %s %d ",p.name,p.init,p.gen,p.group);
-
-		for(int j=0;j<4;j++){
-			printf("%d ",p.marks[j]);
-		}	
-		
-		printf("\n");
-
-		fwrite(&p, sizeof(p),1,f);
+	f=fopen(path,"wb");
+	
+	while(fread(&q,sizeof(Person),1,temp)>0){
+			fwrite(&q,sizeof(Person),1,f);	
 	}
+	fclose(temp);
+	fclose(f);
+	//print_a_base("temp.dat");
+	remove("temp.dat");
+	
+}
+
+void delete_with_same_name(char* path,char* name){
+	FILE* f;
+	FILE* temp;
+	//printf("3\n");
+	f=fopen(path,"rb");
+	//printf("3\n");
+	temp=fopen("temp2.dat","w+b");
+	//printf("3\n");
+	Person q;
+	while(fread(&q,sizeof(Person),1,f)){
+		printf("%d\n",cmp(&q.name,name));
+		if(!cmp(&q.name,name))
+			fwrite(&q,sizeof(Person),1,temp);
+	}
+    rewind(temp);
+	fclose(f);
+	f=fopen(path,"wb");
+	
+	while(fread(&q,sizeof(Person),1,temp)>0){
+			fwrite(&q,sizeof(Person),1,f);	
+	}
+	fclose(temp);
+	fclose(f);
+	//print_a_base("temp.dat");
+	remove("temp2.dat");
+
+
+}
+
+
+
+
+void erase_the_base(char* path){
+	FILE* f;
+	f=fopen(path,"w");
 	fclose(f);
 }
 
+void quit(){
+	exit(0);
+}
 
 
 
-/*void read_a_base(char* c){
-	FILE* f;
-	f=fopen(c,"rb");
-	Person p;
-	while(fread(&p,sizeof(p),1,f)){
 
-		printf("%s %s %s %d ",p.name,p.init,p.gen,p.group);
 
-		for(int j=0;j<4;j++){
-			printf("%d ",p.marks[j]);
-		}
 
-		printf("\n");
-	}
-}*/
+
 
 
 
