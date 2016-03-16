@@ -103,12 +103,16 @@ void remove_nth_element(char* path,int n){
 void delete_with_same_name(char* path,char* name){
 	FILE* f;
 	FILE* temp;
+	//printf("3\n");
 	f=fopen(path,"rb");
-	temp=fopen("temp.dat","w+b");
+	//printf("3\n");
+	temp=fopen("temp2.dat","w+b");
+	//printf("3\n");
 	Person q;
-	while(fread(&q,sizeof(Person),1,f)>0){
-		if(!cmp(q.name,&name))
-			fwrite(&q,sizeof(Person),1,f);
+	while(fread(&q,sizeof(Person),1,f)){
+		printf("%d\n",cmp(&q.name,name));
+		if(!cmp(&q.name,name))
+			fwrite(&q,sizeof(Person),1,temp);
 	}
     rewind(temp);
 	fclose(f);
@@ -120,7 +124,7 @@ void delete_with_same_name(char* path,char* name){
 	fclose(temp);
 	fclose(f);
 	//print_a_base("temp.dat");
-	remove("temp.dat");
+	remove("temp2.dat");
 
 
 }
