@@ -26,14 +26,20 @@ void print_menu(){
 	printf("|----------------------------------------------|\n");
 	printf("|   		     Menu   	               |\n");
 	printf("|----------------------------------------------|\n");
-	printf("|1.     Add new elements		       |\n"); //DONE
-	printf("|2.     Print the base		  	       |\n"); //DONE
-	printf("|3.	Remove the N-th element		       |\n"); //DONE
-	printf("|4.	Remove all element with the same name  |\n");//DONE
-	printf("|5.	Option 18                              |\n");
-	printf("|6.	Delete the base                        |\n"); //DONE
-	printf("|7.     Quit                                   |\n");//DONE
+	printf("|1.     Create a base			       |\n"); //DONE
+	printf("|2.     Add new elements		       |\n"); //DONE
+	printf("|3.     Print the base		  	       |\n"); //DONE
+	printf("|4.	Remove the N-th element		       |\n"); //DONE
+	printf("|5.	Remove all element with the same name  |\n");//DONE
+	printf("|6.	Option 18                              |\n");
+	printf("|7.	Delete the base                        |\n"); //DONE
+	printf("|8.     Quit                                   |\n");//DONE
 	printf("|----------------------------------------------|\n");
+}
+void create_a_base(char* path){
+	FILE* f;
+	f=fopen(path,"wb");
+	fclose(f);
 }
 void add_new_elements(char* path){
 	FILE* f;
@@ -158,27 +164,11 @@ void solution_18(char* path){
 
 void erase_the_base(char* path){
 	FILE* f;
-	f=fopen(path,"w");
+	f=fopen(path,"wb");
 	fclose(f);
 }
 
 void quit(){
 	exit(0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
