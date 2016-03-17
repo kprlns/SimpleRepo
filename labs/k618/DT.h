@@ -26,15 +26,13 @@ void print_menu(){
 	printf("|----------------------------------------------|\n");
 	printf("|   		     Menu   	               |\n");
 	printf("|----------------------------------------------|\n");
-	printf("|1.	Fill the base	 		       |\n"); // REMOVE
-	printf("|2.	Generate a new base	 	       |\n"); // REMOVE
-	printf("|3.     Add new elements		       |\n"); //DONE
-	printf("|4.     Print the base		  	       |\n"); //DONE
-	printf("|5.	Remove the N-th element		       |\n"); //DONE
-	printf("|6.	Remove all element with the same name  |\n");//DONE
-	printf("|7.	Option 18                              |\n");
-	printf("|8.	Delete the base                        |\n"); //DONE
-	printf("|9.     Quit                                   |\n");//DONE
+	printf("|1.     Add new elements		       |\n"); //DONE
+	printf("|2.     Print the base		  	       |\n"); //DONE
+	printf("|3.	Remove the N-th element		       |\n"); //DONE
+	printf("|4.	Remove all element with the same name  |\n");//DONE
+	printf("|5.	Option 18                              |\n");
+	printf("|6.	Delete the base                        |\n"); //DONE
+	printf("|7.     Quit                                   |\n");//DONE
 	printf("|----------------------------------------------|\n");
 }
 void add_new_elements(char* path){
@@ -113,7 +111,7 @@ void delete_with_same_name(char* path,char* name){
 	//printf("3\n");
 	Person q;
 	while(fread(&q,sizeof(Person),1,f)){
-		printf("%d\n",cmp(&q.name,name));
+		//printf("%d\n",cmp(&q.name,name));
 		if(!cmp(&q.name,name))
 			fwrite(&q,sizeof(Person),1,temp);
 	}
@@ -131,7 +129,30 @@ void delete_with_same_name(char* path,char* name){
 
 
 }
-
+void solution_18(char* path){
+	FILE* f;
+	f=fopen(path,"rb");
+	int diff[9];
+	for(int i=0;i<9;i++) diff[i]=0;
+	Person q;
+	while(fread(&q,sizeof(Person),1,f)){
+		int mx=0,mn=6;
+		for(int i=0;i<4;i++){
+			if(q.marks[i]<mn) mn=q.marks[i];
+			if(q.marks[i]>mx) mx=q.marks[i];
+		}	
+		diff[q.group]=abs(mx-mn);
+	}
+	int mx=-1,group=-1;
+	for(int i=1;i<9;i++){
+		if(diff[i]>mx) {
+			mx=diff[i];
+			group=i;
+		}
+	}
+	printf("Group with maximum difference is %d-th \n",group);
+	fclose(f);
+}
 
 
 
