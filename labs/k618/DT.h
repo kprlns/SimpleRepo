@@ -19,6 +19,25 @@ int cmp(char* a,char* b){
 	}	
 	return 1;
 }
+Person new_person(char* name,char* init,char* genn){
+		Person p;
+		//srand((unsigned) time(0) );
+		for(int i=0;i<10;i++){
+			p.name[i]=name[i];			
+		}
+		for(int i=0;i<5;i++){
+			p.initial[i]=init[i];
+			if(i<4){
+				p.marks[i]=rand()%4+2;
+			}			
+		}
+		for(int i=0;i<2;i++){
+			p.gen[i]=genn[i];			
+		}
+		p.group=rand()%8+1;
+	
+		return p;
+}
 
 
 
@@ -26,29 +45,78 @@ void print_menu(){
 	printf("|----------------------------------------------|\n");
 	printf("|   		     Menu   	               |\n");
 	printf("|----------------------------------------------|\n");
-	printf("|1.	Fill the base	 		       |\n"); // REMOVE
-	printf("|2.	Generate a new base	 	       |\n"); // REMOVE
-	printf("|3.     Add new elements		       |\n"); //DONE
+	printf("|1.     Create a base			       |\n"); //DONE
+	printf("|2.     Add new elements		       |\n"); //DONE
+	printf("|3.     Add new random elements		   |\n"); //DONE
 	printf("|4.     Print the base		  	       |\n"); //DONE
 	printf("|5.	Remove the N-th element		       |\n"); //DONE
-	printf("|6.	Remove all element with the same name  |\n");
+	printf("|6.	Remove all element with the same name  |\n");//DONE
 	printf("|7.	Option 18                              |\n");
 	printf("|8.	Delete the base                        |\n"); //DONE
 	printf("|9.     Quit                                   |\n");//DONE
 	printf("|----------------------------------------------|\n");
 }
+
+void create_a_base(char* path){
+	FILE* f;
+	f=fopen(path,"wb");
+	int a;
+	printf("Please enter a number of elemts:\n");
+	scanf("%d",&a);
+	srand((unsigned) time(0) );
+	for(int i=0;i<a;i++){
+		int rand_names=rand()%20;
+		int rand_init=rand()%17;
+		char gen[2];
+		if(rand_names<10) 
+			gen[0]='M';		
+		else	
+			gen[0]='F';
+		gen[1]='\0';
+		Person p=new_person(names[rand_names],inits[rand_init],&gen);
+		fwrite(&p,sizeof(p),1,f);  	
+	}
+	fclose(f);
+}
+void add_random_elements(char* path){
+	FILE* f;
+	f=fopen(path,"a+b");
+	int a;
+	printf("Please enter a number of elements:\n");
+	scanf("%d",&a);
+	srand((unsigned) time(0) );
+	for(int i=0;i<a;i++){
+		int rand_names=rand()%20;
+		int rand_init=rand()%17;
+		char gen[2];
+		if(rand_names<10) 
+			gen[0]='M';		
+		else	
+			gen[0]='F';
+		gen[1]='\0';
+		Person p=new_person(names[rand_names],inits[rand_init],&gen);
+		fwrite(&p,sizeof(p),1,f);  	
+	}
+	fclose(f);
+
+
+}
+
 void add_new_elements(char* path){
 	FILE* f;
 	f=fopen(path,"a+b");
 	Person p;
 	int a;
-	printf("Please enter a number of elemts:\n");
+	printf("Please enter a number of elements:\n");
 	scanf("%d",&a);
 	//printf("%d",sizeof(p.marks));
 	for(int i=0;i<a;i++){
 		scanf("%s%s%s%d",&p.name,&p.initial,&p.gen,&p.group);
 		for(int j=0;j<4;j++){
 			scanf("%d",&p.marks[j]);
+			if(p.marks[j]<2 || p.marks[j]>5) {
+				p.marks[j]=2;
+			}
 		}
 		fwrite(&p,sizeof(Person),1,f);
 	}
@@ -62,12 +130,15 @@ void print_a_base(char* path){
 	FILE* f;
 	f=fopen(path,"rb");
 	Person q;
+	int i=1;
 	while(fread(&q,sizeof(Person),1,f)>0){
-		printf("%s %s %s %d ",q.name,q.initial,q.gen,q.group);
+		printf("№%d ",i);
+		printf("%s %s %s\nGroup: %d\nMarks: ",q.name,q.initial,q.gen,q.group);
 		for(int j=0;j<4;j++){
 				printf("%d ",q.marks[j]);
 		}
 		printf("\n");
+		i++;
 	}
 	fclose(f);
 }
@@ -110,7 +181,7 @@ void delete_with_same_name(char* path,char* name){
 	//printf("3\n");
 	Person q;
 	while(fread(&q,sizeof(Person),1,f)){
-		printf("%d\n",cmp(&q.name,name));
+		//printf("%d\n",cmp(&q.name,name));
 		if(!cmp(&q.name,name))
 			fwrite(&q,sizeof(Person),1,temp);
 	}
@@ -128,33 +199,40 @@ void delete_with_same_name(char* path,char* name){
 
 
 }
-
+void solution_18(char* path){
+	FILE* f;
+	f=fopen(path,"rb");
+	int diff[9];
+	for(int i=0;i<9;i++) diff[i]=0;
+	Person q;
+	while(fread(&q,sizeof(Person),1,f)){
+		int mx=0,mn=6;
+		for(int i=0;i<4;i++){
+			if(q.marks[i]<mn) mn=q.marks[i];
+			if(q.marks[i]>mx) mx=q.marks[i];
+		}	
+		diff[q.group]=abs(mx-mn);
+	}
+	int mx=-1,group=-1;
+	for(int i=1;i<9;i++){
+		if(diff[i]>mx) {
+			mx=diff[i];
+			group=i;
+		}
+	}
+	printf("Group with maximum difference is %d-th \n",group);
+	fclose(f);
+}
 
 
 
 void erase_the_base(char* path){
 	FILE* f;
-	f=fopen(path,"w");
+	f=fopen(path,"wb");
 	fclose(f);
 }
 
 void quit(){
 	exit(0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
