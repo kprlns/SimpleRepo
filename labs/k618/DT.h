@@ -19,6 +19,25 @@ int cmp(char* a,char* b){
 	}	
 	return 1;
 }
+Person new_person(char* name,char* init,char* genn){
+		Person p;
+		//srand((unsigned) time(0) );
+		for(int i=0;i<10;i++){
+			p.name[i]=name[i];			
+		}
+		for(int i=0;i<5;i++){
+			p.initial[i]=init[i];
+			if(i<4){
+				p.marks[i]=rand()%4+2;
+			}			
+		}
+		for(int i=0;i<2;i++){
+			p.gen[i]=genn[i];			
+		}
+		p.group=rand()%8+1;
+	
+		return p;
+}
 
 
 
@@ -28,25 +47,67 @@ void print_menu(){
 	printf("|----------------------------------------------|\n");
 	printf("|1.     Create a base			       |\n"); //DONE
 	printf("|2.     Add new elements		       |\n"); //DONE
-	printf("|3.     Print the base		  	       |\n"); //DONE
-	printf("|4.	Remove the N-th element		       |\n"); //DONE
-	printf("|5.	Remove all element with the same name  |\n");//DONE
-	printf("|6.	Option 18                              |\n");
-	printf("|7.	Delete the base                        |\n"); //DONE
-	printf("|8.     Quit                                   |\n");//DONE
+	printf("|3.     Add new random elements		   |\n"); //DONE
+	printf("|4.     Print the base		  	       |\n"); //DONE
+	printf("|5.	Remove the N-th element		       |\n"); //DONE
+	printf("|6.	Remove all element with the same name  |\n");//DONE
+	printf("|7.	Option 18                              |\n");
+	printf("|8.	Delete the base                        |\n"); //DONE
+	printf("|9.     Quit                                   |\n");//DONE
 	printf("|----------------------------------------------|\n");
 }
+
 void create_a_base(char* path){
 	FILE* f;
 	f=fopen(path,"wb");
+	int a;
+	printf("Please enter a number of elemts:\n");
+	scanf("%d",&a);
+	srand((unsigned) time(0) );
+	for(int i=0;i<a;i++){
+		int rand_names=rand()%20;
+		int rand_init=rand()%17;
+		char gen[2];
+		if(rand_names<10) 
+			gen[0]='M';		
+		else	
+			gen[0]='F';
+		gen[1]='\0';
+		Person p=new_person(names[rand_names],inits[rand_init],&gen);
+		fwrite(&p,sizeof(p),1,f);  	
+	}
 	fclose(f);
 }
+void add_random_elements(char* path){
+	FILE* f;
+	f=fopen(path,"a+b");
+	int a;
+	printf("Please enter a number of elements:\n");
+	scanf("%d",&a);
+	srand((unsigned) time(0) );
+	for(int i=0;i<a;i++){
+		int rand_names=rand()%20;
+		int rand_init=rand()%17;
+		char gen[2];
+		if(rand_names<10) 
+			gen[0]='M';		
+		else	
+			gen[0]='F';
+		gen[1]='\0';
+		Person p=new_person(names[rand_names],inits[rand_init],&gen);
+		fwrite(&p,sizeof(p),1,f);  	
+	}
+	fclose(f);
+
+
+}
+
 void add_new_elements(char* path){
 	FILE* f;
 	f=fopen(path,"a+b");
 	Person p;
 	int a;
-	printf("Please enter a number of elemts:\n");
+	printf("Please enter a number of elements:\n");
 	scanf("%d",&a);
 	//printf("%d",sizeof(p.marks));
 	for(int i=0;i<a;i++){
@@ -69,12 +130,15 @@ void print_a_base(char* path){
 	FILE* f;
 	f=fopen(path,"rb");
 	Person q;
+	int i=1;
 	while(fread(&q,sizeof(Person),1,f)>0){
-		printf("%s %s %s %d ",q.name,q.initial,q.gen,q.group);
+		printf("№%d ",i);
+		printf("%s %s %s\nGroup: %d\nMarks: ",q.name,q.initial,q.gen,q.group);
 		for(int j=0;j<4;j++){
 				printf("%d ",q.marks[j]);
 		}
 		printf("\n");
+		i++;
 	}
 	fclose(f);
 }
