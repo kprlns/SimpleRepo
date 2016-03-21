@@ -19,6 +19,7 @@ int cmp(char* a,char* b){
 	}
 	return 1;
 }
+
 Person new_person(char* name,char* init,char* genn){
 		Person p;
 		//srand((unsigned) time(0) );
@@ -47,11 +48,11 @@ void print_menu(){
 	printf("|----------------------------------------------|\n");
 	printf("|1.     Create a base			       |\n"); //DONE
 	printf("|2.     Add new elements		       |\n"); //DONE
-	printf("|3.     Add new random elements		   |\n"); //DONE
+	printf("|3.     Add new random elements		       |\n"); //DONE
 	printf("|4.     Print the base		  	       |\n"); //DONE
 	printf("|5.	Remove the N-th element		       |\n"); //DONE
 	printf("|6.	Remove all element with the same name  |\n");//DONE
-	printf("|7.	Option 18                              |\n");
+	printf("|7.	Option 18                              |\n");//DONE
 	printf("|8.	Delete the base                        |\n"); //DONE
 	printf("|9.     Quit                                   |\n");//DONE
 	printf("|----------------------------------------------|\n");
@@ -156,7 +157,7 @@ void remove_nth_element(char* path,int n){
 	f=fopen(path,"rb");
 	temp=fopen("temp.dat","w+b");
 	if(f&&temp){
-		int i=0;
+		int i=1;
 		Person q;
 		while(fread(&q,sizeof(Person),1,f)>0){
 			if(i!=n){
@@ -211,7 +212,7 @@ void delete_with_same_name(char* path,char* name){
 		//print_a_base("temp.dat");
 		remove("temp2.dat");
 	}else{
-		printf("I can not find or open the file.\n");
+		 printf("I can not find or open the file.\n");
 	}
 
 
@@ -247,7 +248,8 @@ void solution_18(char* path){
 					group=i;
 			 }
 		}
-		printf("Group with maximum difference is %d-th with difference: %.2f \n",group,difference);
+		if(group!=-1) printf("Group with maximum difference is %d-th with difference: %.2f \n",group,difference);
+		else printf("There are no students\n" );
 		fclose(f);
 	}else{
 		printf("I can not find or open the file.\n");
