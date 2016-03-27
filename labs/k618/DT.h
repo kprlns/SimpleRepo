@@ -40,8 +40,6 @@ Person new_person(char* name,char* init,char* genn){
 		return p;
 }
 
-
-
 void print_menu(){
 	printf("|----------------------------------------------|\n");
 	printf("|   		     Menu   	               |\n");

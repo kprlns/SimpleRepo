@@ -49,11 +49,13 @@ int main(int args,char* arg[]){
 				scanf("%s%d",base_name,&looser);
 				remove_nth_element(base_name,looser);
 				printf("----------------------\n");
+				break;
 			case 6:
 				printf("Please write a base name:\n");
 				scanf("%s%s",base_name,person_name);
 				delete_with_same_name(base_name,person_name);
 				printf("----------------------\n");
+				break;
 			case 7:
 				printf("Please write a base name:\n");
 				scanf("%s",base_name);
