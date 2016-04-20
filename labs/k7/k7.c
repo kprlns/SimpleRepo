@@ -40,10 +40,6 @@ void add_elements_to_end(list l, int n, int flag) {
             scanf("%d",&data);
             t->data=data;
         }
-        t->next = NULL;
-        temp->next = t;
-        temp=temp->next;
-
     }
 }
 
@@ -115,7 +111,7 @@ void delete_element(list l,int n) {
     }
 }
 
-void solution(list l, int f) {
+void solution(list l, int f, int flag) {
 
     list temp = l;
     int first = -1, last = -1;
