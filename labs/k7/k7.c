@@ -20,7 +20,7 @@ int is_empty(list l) {
         return 0;
 
 }
-void add_elements_to_end(list l, int n) {
+void add_elements_to_end(list l, int n, int flag) {
     //srand(time(NULL));
     list temp = l;
     if (!is_empty(temp)) {
@@ -33,16 +33,14 @@ void add_elements_to_end(list l, int n) {
     for (int i = 0; i < n; ++i) {
 
         list t = malloc(sizeof(node));
-        t->data = (rand() % 101 - 50);
-        t->next = NULL;
-        temp->next = t;
-        temp=temp->next;
-
+        if(flag){
+            t->data = (rand() % 101 - 50);
+        }else{
+            int data;
+            scanf("%d",&data);
+            t->data=data;
+        }
     }
-    /*list t = malloc(sizeof(node));
-    t->data = (float) (rand() % 1000 - 500.0) / (rand() % 20 + 1);
-    t->next = NULL;
-    temp->next = t;*/
 }
 
 void print_list(list l){
@@ -137,7 +135,7 @@ void solution(list l, int f, int flag) {
         if (temp->data == f && flag1) {
             last = i;
         }
-        printf("%d %d\n", first, last);
+        //printf("%d %d\n", first, last);
         temp = l;
         temp = temp->next;
         int dif = last - first;
@@ -145,7 +143,7 @@ void solution(list l, int f, int flag) {
             delete_element(l, 1);
         }
         temp = l->next;
-        printf("%d\n", temp->data);
+       // printf("%d\n", temp->data);
 
         for (int j = 0; j < dif; j++)
             temp = temp->next;
@@ -166,77 +164,67 @@ void solution(list l, int f, int flag) {
 
 
 void print_menu(){
+    printf("|----------------------------------------------|\n");
+    printf("|   		     Menu                  |\n");
+    printf("|----------------------------------------------|\n");
+    printf("|1. Add new elements		           |\n"); //DONE
+    printf("|2. Add new random elements		           |\n"); //DONE
+    printf("|3. Print list		  	           |\n"); //DONE
+    printf("|4.	Remove the N-th element		           |\n"); //DONE
+    printf("|5.	Option 4                                   |\n");//DONE
+    printf("|6.	Delete the list				   |\n"); //DONE
+    printf("|7. Quit                                       |\n");//DONE
+    printf("|----------------------------------------------|\n");
 
-    printf("|----------------------------------------------|\n");
-    printf("|   		     Menu   	                   |\n");
-    printf("|----------------------------------------------|\n");
-    printf("|1. Create a base			                   |\n"); //DONE
-    printf("|2. Add new elements		                   |\n"); //DONE
-    printf("|3. Add new random elements		               |\n"); //DONE
-    printf("|4. Print list		  	                       |\n"); //DONE
-    printf("|5.	Remove the N-th element		               |\n"); //DONE
-    printf("|7.	Option 4                                   |\n");//DONE
-    printf("|8.	Delete the base                            |\n"); //DONE
-    printf("|9. Quit                                       |\n");//DONE
-    printf("|----------------------------------------------|\n");
+}
+
+void delete_the_list(list l){
+	int temp=number_of_elements(l);
+	for(int i=0;i<temp;i++){
+		delete_element(l,1);
+	}
 
 
 }
+
+
+
 int main(int args,int argc[]) {
-    /*srand(time(NULL));
-    list n1 = malloc(sizeof(node));
-    list n2 = malloc(sizeof(node));
-    list n3 = malloc(sizeof(node));
-    list n4 = malloc(sizeof(node));
-    list n5 = malloc(sizeof(node));
-    list n6 = malloc(sizeof(node));
-    n1->data=2;
-    n1->next=n2;
-    n2->data=2;
-    n2->next=n3;
-    n3->data=1;
-    n3->next=n4;
-    n4->data=2;
-    n4->next=n5;
-    n5->data=2;
-    n5->next=NULL;
-    list temp = l;
-    //temp->next=&n2;
-    //temp=temp->next;
-    add_elements_to_end(l, 2);
-    add_elements_to_end(l, 1);
-    add_elements_to_end(l, 1);
-
-    while (temp->next != NULL) {
-        printf("%f\n",temp->data);
-        temp = temp->next;
-    }
-    printf("%f\n",temp->data);
-
-    print_list(l);
-    delete_element(l,1);
-    printf("\n");
-    print_list(l);
-    printf("%d\n",number_of_elements(l));
-    l->next=n1;
-    temp=temp->next;
-    temp->next=n2;
-    temp=temp->next;
-    temp->next=n3;
-    temp=temp->next;
-    temp->next=n4;
-    temp=temp->next;
-    temp->next=n5;
-    temp=temp->next;
-    print_list(l);
-    solution(l, 1, 0);
-    print_list(l);*/
-
     print_menu();
-
-
-
-
-
+    int choose, number;
+    while (1) {
+        scanf("%d", &choose);
+        switch (choose) {
+            case 1:
+                printf("How much elements do you want to add?\n");
+                scanf("%d", &number);
+                add_elements_to_end(l, number, 0);
+                break;
+            case 2:
+                printf("How much elements do you want to add?\n");
+                scanf("%d", &number);
+                add_elements_to_end(l, number, 1);
+                break;
+            case 3:
+                printf("Our list:\n");
+                print_list(l);
+                break;
+            case 4:
+                printf("What element do you want to delete?\n");
+                scanf("%d",&number);
+                delete_element(l,number);
+		break;
+            case 5:
+		printf("Choose a number for task\n");
+		scanf("%d",&number);
+		solution(l,number);
+		break;
+	    case 6:
+		delete_the_list(l);
+		break;
+	    default:
+                return 0;
+        }
+    }
     return 0;
 }
