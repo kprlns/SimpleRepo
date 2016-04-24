@@ -56,7 +56,7 @@ tree create_a_tree(int levels){
             temp=temp->next;
             temp->n=create_a_tree(levels);
         }
-        //	printf("%d %d\n",levels,nodes_for_levels);
+        //printf("%d %d\n",levels,nodes_for_levels);
     }
     return t;
 }
@@ -142,7 +142,11 @@ void add_new_node(tree tr,char* path){
 }
 
 void remove_a_node(tree tr,char* path){
-
+	
+	int nth=path[counter]-'0';
+	if(number_of_sons(tr)<nth){
+		printf("Sorry there are only %d elements\n",number_of_sons(tr));
+	}
 
 
 }
@@ -157,13 +161,15 @@ int main(){
     print_a_tree(t);
     // printf("%d %d\n",number_of_sons(t),counter);
     printf("%d\n ",counter);
-    char a[10]="31";
+    char a[10]="11";
     add_new_node(t,a);
     printf("----------\n");
     print_a_tree(t);
-    printf("%d\n ",counter);
-   	 
-	
+    printf("%d\n",counter);
+    
+    remove_a_node(t,"1");
+    	
+    
 
     return 1;
 }
