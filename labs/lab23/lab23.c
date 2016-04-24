@@ -140,6 +140,13 @@ void add_new_node(tree tr,char* path){
         }
     }
 }
+
+void remove_a_node(tree tr,char* path){
+
+
+
+}
+
 int main(){
     srand(time(NULL));
     t=create_a_tree(2);
@@ -149,11 +156,15 @@ int main(){
     printf("%lu %lu\n",sizeof(list),sizeof(node));
     print_a_tree(t);
     // printf("%d %d\n",number_of_sons(t),counter);
-   
+    printf("%d\n ",counter);
     char a[10]="31";
     add_new_node(t,a);
     printf("----------\n");
     print_a_tree(t);
+    printf("%d\n ",counter);
+   	 
+	
+
     return 1;
 }
 
