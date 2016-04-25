@@ -140,15 +140,30 @@ void add_new_node(tree tr,char* path){
         }
     }
 }
+void deletion(tree tr){
+	if(has_sons(tr)){
+		list* temp=tr->sons;
+		int num_of_sons=number_of_sons(tr);
+		for(int i=0;i<num_of_sons-1;i++){
+			deletion(temp->n);
+			temp=temp->next;
+		}	
+	}else{
+		free(tr);
+	}
+}
+
 
 void remove_a_node(tree tr,char* path){
 	
 	int nth=path[counter]-'0';
 	if(number_of_sons(tr)<nth){
-		printf("Sorry there are only %d elements\n",number_of_sons(tr));
+		printf("There are only %d sons , nothing to delte\n",number_of_sons(tr));
+	}else{
+		
+
+
 	}
-
-
 }
 
 int main(){
@@ -166,11 +181,8 @@ int main(){
     printf("----------\n");
     print_a_tree(t);
     printf("%d\n",counter);
-    
-    remove_a_node(t,"1");
-    	
-    
-
+    char d[3]="1";
+    remove_a_node(t,d);
     return 1;
 }
 
