@@ -24,6 +24,14 @@ int has_sons(tree t){
         return 0;
 
 }
+
+int len(char* a){
+	int i=0;
+	while(a[i]!='\0') 
+		i++;
+	return i;
+}
+
 tree create_a_tree(int levels){
     levels-=1;
     tree t=(node*)malloc(sizeof(node));
@@ -140,12 +148,12 @@ void add_new_node(tree tr,char* path){
         }
     }
 }
-void deletion(tree tr){
+void deletion_sons(tree tr){
 	if(has_sons(tr)){
 		list* temp=tr->sons;
 		int num_of_sons=number_of_sons(tr);
 		for(int i=0;i<num_of_sons-1;i++){
-			deletion(temp->n);
+			deletion_sons(temp->n);
 			temp=temp->next;
 		}	
 	}else{
@@ -155,14 +163,35 @@ void deletion(tree tr){
 
 
 void remove_a_node(tree tr,char* path){
-	
-	int nth=path[counter]-'0';
-	if(number_of_sons(tr)<nth){
-		printf("There are only %d sons , nothing to delte\n",number_of_sons(tr));
+
+	if(!len(path)){
+
+		printf("Sorry connot delete this node (uncorrect path)\n");
+
 	}else{
-		
+		int nth=path[counter]-'0';
+		if(number_of_sons(tr)<nth){
+:q
+:q
+		}else{
+			list* temp=tr->sons;
+			if(counter==len(path)-1){
+				
+			
+				
 
 
+			}else{
+
+				counter++;
+				for(int i=0;i<nth;i++){
+					temp=temp->next;
+				}
+				remove_a_node(temp->n,path);
+				counter--;
+
+			}	
+		}
 	}
 }
 
@@ -183,6 +212,8 @@ int main(){
     printf("%d\n",counter);
     char d[3]="1";
     remove_a_node(t,d);
+    printf("%d\n",len(d)); 	 
+    printf("----------\n");
     return 1;
 }
 
