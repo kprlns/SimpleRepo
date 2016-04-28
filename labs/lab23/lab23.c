@@ -26,10 +26,21 @@ int has_sons(tree t){
 }
 
 int len(char* a){
-	int i=0;
-	while(a[i]!='\0') 
-		i++;
-	return i;
+    int i=0;
+    while(a[i]!='\0')
+        i++;
+    return i;
+}
+
+int correct_path(char* a){
+
+    for(int i=0;a[i]!='\0';i++){
+        if( a[i]<48 || a[i]>57){
+            return 0;
+        }
+
+    }
+    return 1;
 }
 
 tree create_a_tree(int levels){
@@ -148,51 +159,64 @@ void add_new_node(tree tr,char* path){
         }
     }
 }
+
+
 void deletion_sons(tree tr){
-	if(has_sons(tr)){
-		list* temp=tr->sons;
-		int num_of_sons=number_of_sons(tr);
-		for(int i=0;i<num_of_sons-1;i++){
-			deletion_sons(temp->n);
-			temp=temp->next;
-		}	
-	}else{
-		free(tr);
-	}
+    if(has_sons(tr)){
+        list* temp=tr->sons;
+        int num_of_sons=number_of_sons(tr);
+        for(int i=0;i<num_of_sons-1;i++){
+            deletion_sons(temp->n);
+            free(temp->n);
+            temp=temp->next;
+        }
+    }else{
+        free(tr);
+    }
 }
 
 
 void remove_a_node(tree tr,char* path){
+    if(!len(path) || !correct_path(path)){
+        printf("Sorry connot delete this node (uncorrect path)\n");
+    }else{
+        int nth=path[counter]-'0';
+        if(number_of_sons(tr)<nth || !(tr->sons)){
+            printf("Sorry there are only %d sons connot delete anything\n",number_of_sons(tr));
+        }else{
 
-	if(!len(path)){
+            list* temp=tr->sons;
 
-		printf("Sorry connot delete this node (uncorrect path)\n");
+            if(path[counter+1]=='\0'){
 
-	}else{
-		int nth=path[counter]-'0';
-		if(number_of_sons(tr)<nth){
-:q
-:q
-		}else{
-			list* temp=tr->sons;
-			if(counter==len(path)-1){
-				
-			
-				
+                if(nth==1){
+                    if(number_of_sons(tr)==1){
+                        tr->sons=NULL;
+                        deletion_sons(temp->n);
+                    }else{
+                        tr->sons=temp->next;
+                        deletion_sons(temp->n);
+                    }
+                }else {
+                    for (int i = 0; i < nth-2; ++i) {
+                        temp = temp->next;
+                    }
+                    list* del=temp->next;
+                    temp->next=del->next;
+                    deletion_sons(del->n);
+                    free(del);
+                }
+            }else{
+                counter++;
+                for(int i=0;i<nth;i++){
+                    temp=temp->next;
+                }
+                remove_a_node(temp->n,path);
+                counter--;
+            }
 
-
-			}else{
-
-				counter++;
-				for(int i=0;i<nth;i++){
-					temp=temp->next;
-				}
-				remove_a_node(temp->n,path);
-				counter--;
-
-			}	
-		}
-	}
+        }
+    }
 }
 
 int main(){
@@ -209,11 +233,12 @@ int main(){
     add_new_node(t,a);
     printf("----------\n");
     print_a_tree(t);
-    printf("%d\n",counter);
-    char d[3]="1";
+   // printf("%d\n",counter);
+    char d[3]="2";
     remove_a_node(t,d);
-    printf("%d\n",len(d)); 	 
+    printf("%d\n",correct_path(d));
     printf("----------\n");
+    print_a_tree(t);
     return 1;
 }
 
