@@ -22,6 +22,7 @@ int has_sons(tree t){
         return 1;
     else
         return 0;
+
 }
 
 int len(char* a){
@@ -206,8 +207,11 @@ void remove_a_node(tree tr,char* path){
         if(number_of_sons(tr)<nth || !(tr->sons)){
             printf("Sorry there are only %d sons connot delete anything\n",number_of_sons(tr));
         }else{
+
             list* temp=tr->sons;
+
             if(path[counter+1]=='\0'){
+
                 if(nth==1){
                     if(number_of_sons(tr)==1){
                         tr->sons=NULL;
@@ -240,17 +244,17 @@ void remove_a_node(tree tr,char* path){
 
 void print_menu(){
     printf("|----------------------------------------------|\n");
-    printf("   		     Menu                     \n");
+    printf("|   		     Menu                          |\n");
     printf("|----------------------------------------------|\n");
-    printf("0.Print menu	 \n");
-    printf("1.Create a tree		                   \n");
-    printf("2.Print tree		                   \n");
-    printf("3.Add new node to tree automatically	   \n");
-    printf("4.Add new node to tree manually	  	   \n");
-    printf("5.Remove node		                   \n");
-    printf("6.Delete tree                                \n");
-    printf("7.Task 34			                   \n");
-    printf("8.Quit                                       \n");
+    printf("|1. Create a tree		                       |\n");
+    printf("|2. Print tree		                           |\n");
+    printf("|3. Add new node to tree automatically	  	   |\n");
+    printf("|4. Add new node to tree manually	  	       |\n");
+    printf("|5.	Remove node		                           |\n");
+    printf("|6.	Delete tree                                |\n");
+    printf("|7.	Task 34			                           |\n");
+    printf("|8. Quit                                       |\n");
+    printf("|----------------------------------------------|\n");
 }
 tree delete_tree(tree tr){
     deletion_sons(tr);
@@ -279,15 +283,11 @@ int main(){
     while(1){
         scanf("%d",&num);
         switch(num){
-            case 0:
-   	        print_menu();
-		break;
             case 1:
                 printf("How much levels for tree?\n");
                 scanf("%d",&lvl);
                 t=create_a_tree(lvl);
-                printf("Done\n");
-		break;
+                break;
             case 2:
                 printf("---------\n");
                 print_a_tree(t,0);
@@ -313,13 +313,14 @@ int main(){
                 break;
             case 7:
                 print_a_tree(t,1);
-                printf("Level with maximum number of nodes: %d\n",find_max_level(levels));
+                printf("%d\n",find_max_level(levels));
                 break;
             case 8:
                 return 0;
             default:
-                printf("Please use number from 0 to 8\n");
+                printf("Please use number from 1 to 7\n");
                 break;
         }
     }
+   
 }
