@@ -202,7 +202,7 @@ unon* string_to_union_array(char* a){
                     temp++;
             }
             printf("end of positive variable:%d\n",temp);
-            
+
         }
         if (a[i] == '(' || a[i] == ')' || a[i] == '-' || a[i] == '+' || a[i] == '*' || a[i] == '/' || a[i] == '^') {
                 unon temp;
