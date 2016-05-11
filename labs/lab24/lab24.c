@@ -48,6 +48,7 @@ int size_of_stack(stack s){
 void push_back(stack st,unon u){
     if(is_empty_stack(st)){
         st->data=(unon*)malloc(100*sizeof(unon));
+        st->type=(int*)malloc(100*sizeof(int));
         st->data[0]=u;
         st->cap=u;
         st->size=1;
@@ -60,6 +61,7 @@ void push_back(stack st,unon u){
 void pop_back(stack s){
     if(!is_empty_stack(s)){
         s->size--;
+        s->cap=s->data[s->size];
     }
 }
 
@@ -97,6 +99,17 @@ int is_multiply_divide(char a){
 }
 int is_power(char a){
     return a=='^';
+}
+int type_of_element(char a){
+    if(is_bracket(a))
+        return 10;
+    if(is_plus_minus(a))
+        return 20;
+    if(is_multiply_divide(a))
+        return 30;
+    if(is_power(a))
+        return 40;
+    return 0;
 }
 
 int size_of_string(char* a){
@@ -147,7 +160,7 @@ m string_to_union_array(char* a){
         if( (a[i]=='-' && a[i-1]=='(') ){
             int temp=i+1;
             if(is_digit(a[i+1])){
-                while(a[temp]!=')' && a[temp]!='-' && a[temp]!='+' && a[temp]!='*' && a[temp]!='/' && a[temp]!='^'){
+                while(!type_of_element(a[temp])){
                     if(!is_digit(a[temp])){
                         printf("Invalid variable \n");
                         return 0;
@@ -170,7 +183,7 @@ m string_to_union_array(char* a){
                 i=temp;
             }else{
                 temp++;
-                while(a[temp]!=')' && a[temp]!='-' && a[temp]!='+' && a[temp]!='*' && a[temp]!='/' && a[temp]!='^'){
+                while(!type_of_element(a[temp])){
                     if(!is_digit(a[temp]) && !is_alpha(a[temp])){
                         printf("Invalid variable \n");
                         return 0;
@@ -192,7 +205,7 @@ m string_to_union_array(char* a){
             }
         }else if(is_digit(a[i])){
             int temp=i+1;
-            while(a[temp]!=')' && a[temp]!='-' && a[temp]!='+' && a[temp]!='*' && a[temp]!='/' && a[temp]!='^'){
+            while(!type_of_element(a[temp])){
                 if(!is_digit(a[temp]) && !is_alpha(a[temp])){
                     printf("Invalid variable \n");
                     return 0;
@@ -213,7 +226,7 @@ m string_to_union_array(char* a){
             i=temp;
         }else  if(is_alpha(a[i])){
             int temp=i+1;
-            while(a[temp]!=')' && a[temp]!='-' && a[temp]!='+' && a[temp]!='*' && a[temp]!='/' && a[temp]!='^'){
+            while(!type_of_element(a[temp])){
                 if(!is_digit(a[temp]) && !is_alpha(a[temp])){
                     printf("Invalid variable \n");
                     return 0;
@@ -232,7 +245,7 @@ m string_to_union_array(char* a){
             res->type[j]=2;
             j++;
         }
-        if (a[i] == '(' || a[i] == ')' || a[i] == '-' || a[i] == '+' || a[i] == '*' || a[i] == '/' || a[i] == '^') {
+        if (type_of_element(a[i])) {
                 unon temp;
                 temp.operation = a[i];
                 res->arr[j] = temp;
@@ -244,58 +257,85 @@ m string_to_union_array(char* a){
     res->size=j;
     return res;
 }
-int type_of_element(char a){
-    if(is_bracket(a))
-        return 1;
-    if(is_plus_minus(a))
-        return 2;
-    if(is_multiply_divide(a))
-        return 3;
-    if(is_power(a))
-        return 4;
-    return 0;
-}
+
 
 void print_union_array(m ms){
     for(int i=0;i<ms->size;i++){
         switch(ms->type[i]){
             case 1:
-                printf("%d",ms->arr[i].number);
+                printf("%d ",ms->arr[i].number);
                 break;
             case 2:
-                printf("%s",ms->arr[i].variable);
+                printf("%s ",ms->arr[i].variable);
                 break;
             case 3:
-                printf("%c",(char)ms->arr[i].operation);
+                printf("%c ",ms->arr[i].operation);
+                break;
+            default:
                 break;
         }
     }
 }
 m dijkstra(m expr){
-    
-
-
-
-
+    m res=(m)malloc(sizeof(mass));
+    res->arr=(unon*)malloc(expr->size*sizeof(unon));
+    res->type=(int*)malloc(expr->size*sizeof(int));
+    int n;
+    int j=0;
+    for(int i=0;i<expr->size;i++){
+        n=expr->type[i];
+        switch(n){
+            case 1:
+                res->type[j]=expr->type[i];
+                res->arr[j]=expr->arr[i];
+                res->size++;
+                j++;
+                break;
+            case 2:
+                res->type[j]=expr->type[i];
+                res->arr[j]=expr->arr[i];
+                res->size++;
+                j++;
+                break;
+            case 3:
+                if(is_empty_stack(st1)){
+                    push_back(st1,expr->arr[i]);
+                    st1->type[st1->size-1]=type_of_element(expr->arr[i].operation);
+                } else{
+                    pop_back(st1);
+                    //st1->type[st1->size-1]=type_of_element(expr->arr[i].operation);
+                }
+                break;
+            default:
+                break;
+            /*T0D0
+             * нормально обработать пункт 3 для разных элементов 
+             * 
+             * 
+             * */
+        }
+    }
+    return res;
 }
 int main(){
-    char a[100];
     unon q;
     q.number=1;
     unon t;
     t.number=2;
-    printf("%d !1 \n",is_empty_stack(st1));
-    push_back(st1,q);
-    printf("%d !2 \n",size_of_stack(st1));
-    push_back(st1,t);
-    printf("%d !3 \n",size_of_stack(st1));
+    printf("%d !1 \n",is_empty_stack(st2));
+    push_back(st2,q);
+    printf("%d !2 \n",size_of_stack(st2));
+    push_back(st2,t);
+    printf("%d !3 \n",size_of_stack(st2));
     pop_back(st1);
-    printf("%d !4 \n",size_of_stack(st1));
+    printf("%d !4 \n",size_of_stack(st2));
     char r[]="(((-12)+b*4)+5)";
     printf("%d !5 \n",correct_bracket(r));
     m test=string_to_union_array(r);
     printf("%d !6\n",is_alpha('a'));
     print_union_array(test);
-
+    printf("\n");
+    m test2=dijkstra(test);
+    print_union_array(test2);
     return 0;
 }
