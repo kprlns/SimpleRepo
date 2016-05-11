@@ -19,14 +19,22 @@ typedef enum{
 
 typedef struct s{
     unon* data;
+    int* type;
     int size;
     unon cap;
 }s;
 
+typedef struct mass{
+    unon* arr;
+    int* type;
+    int size;
+}mass;
+
+typedef struct mass* m;
 typedef struct s* stack;
+
 stack st1=(stack)malloc(sizeof(s));
 stack st2=(stack)malloc(sizeof(s));
-
 
 int is_empty_stack(stack s){
     if(s->size)
@@ -87,6 +95,9 @@ int is_plus_minus(char a){
 int is_multiply_divide(char a){
     return a=='/' || a=='*';
 }
+int is_power(char a){
+    return a=='^';
+}
 
 int size_of_string(char* a){
     int j=0;
@@ -123,8 +134,13 @@ int is_alpha(char a){
     else
         return 0;
 }
-unon* string_to_union_array(char* a){
-    unon* arr=(unon*)malloc((size_of_string(a))*sizeof(unon));
+m string_to_union_array(char* a){
+
+    m res=(m)malloc(sizeof(mass));
+    int siz=size_of_string(a);
+    res->arr=(unon*)malloc(siz*sizeof(unon));
+    res->type=(int*)malloc(siz*sizeof(int));
+    res->size=0;
     int j=0;
     for(int i=0;i<size_of_string(a);i++){
 
@@ -148,7 +164,8 @@ unon* string_to_union_array(char* a){
                 ar[q]='\0';
                 int test=char_array_to_int(ar);
                 test*=-1;
-                arr[j].number=test;
+                res->arr[j].number=test;
+                res->type[j]=1;
                 j++;
                 i=temp;
             }else{
@@ -168,7 +185,8 @@ unon* string_to_union_array(char* a){
                     ar[q]=a[i+q];
                 }
                 ar[q]='\0';
-                arr[j].variable=ar;
+                res->arr[j].variable=ar;
+                res->type[j]=2;
                 j++;
                 i=temp;
             }
@@ -189,7 +207,8 @@ unon* string_to_union_array(char* a){
             }
             int test=char_array_to_int(ar);
             printf("%d <- number in expr \n",test);
-            arr[j].number=test;
+            res->arr[j].number=test;
+            res->type[j]=1;
             j++;
             i=temp;
         }else  if(is_alpha(a[i])){
@@ -202,21 +221,29 @@ unon* string_to_union_array(char* a){
                     temp++;
             }
             printf("end of positive variable:%d\n",temp);
-
+            int size=temp-i;
+            char* ar=(char*)malloc(size*sizeof(char));
+            int q=0;
+            for(;q<size;q++){
+                ar[q]=a[i+q];
+            }
+            ar[size]='\0';
+            res->arr[j].variable=ar;
+            res->type[j]=2;
+            j++;
         }
         if (a[i] == '(' || a[i] == ')' || a[i] == '-' || a[i] == '+' || a[i] == '*' || a[i] == '/' || a[i] == '^') {
                 unon temp;
                 temp.operation = a[i];
-                arr[j] = temp;
+                res->arr[j] = temp;
+                res->type[j]=3;
                 j++;
         }
 
     }
-    return arr;
+    res->size=j;
+    return res;
 }
-
-
-
 int type_of_element(char a){
     if(is_bracket(a))
         return 1;
@@ -224,7 +251,32 @@ int type_of_element(char a){
         return 2;
     if(is_multiply_divide(a))
         return 3;
-    return 4;
+    if(is_power(a))
+        return 4;
+    return 0;
+}
+
+void print_union_array(m ms){
+    for(int i=0;i<ms->size;i++){
+        switch(ms->type[i]){
+            case 1:
+                printf("%d",ms->arr[i].number);
+                break;
+            case 2:
+                printf("%s",ms->arr[i].variable);
+                break;
+            case 3:
+                printf("%c",(char)ms->arr[i].operation);
+                break;
+        }
+    }
+}
+m dijkstra(m expr){
+    
+
+
+
+
 }
 int main(){
     char a[100];
@@ -241,9 +293,9 @@ int main(){
     printf("%d !4 \n",size_of_stack(st1));
     char r[]="(((-12)+b*4)+5)";
     printf("%d !5 \n",correct_bracket(r));
-    unon* test=string_to_union_array(r);
+    m test=string_to_union_array(r);
     printf("%d !6\n",is_alpha('a'));
-
+    print_union_array(test);
 
     return 0;
 }
