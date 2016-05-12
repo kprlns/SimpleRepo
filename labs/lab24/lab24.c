@@ -221,9 +221,11 @@ m string_to_union_array(char* a){
             printf("end of number:%d\n",temp);
             int size=temp-i;
             char* ar=(char*) malloc((size+1)*sizeof(char));
-            for(int q=0;q<size;q++){
+            int q=0;
+            for(;q<size;q++){
                 ar[q]=a[i+q];
             }
+            ar[size+1]='\0';
             int test=char_array_to_int(ar);
             printf("%d <- number in expr \n",test);
             res->arr[j].number=test;
@@ -307,36 +309,52 @@ m dijkstra(m expr){
                 if(is_empty_stack(st1)){
                     push_back(st1,expr->arr[i]);
                     st1->type[st1->size-1]=3;
-                } else{
-                    int type=type_of_element(expr->arr[i].operation);
-                    unon q=expr->arr[i];
+                } else {
+                    int type = type_of_element(expr->arr[i].operation);
+                    unon q = expr->arr[i];
                     /*10 - скобки
                      * 20 - (+ и -)
                      * 30 - (* и /)
                      * 40 - ^
                      * */
-                    int cp=type_of_element(st1->cap.operation);
-                    if(type==cp && !is_bracket(expr->arr[i].operation)){
+                    int cp = type_of_element(st1->cap.operation);
+                    if (cp >= type && type!=10) {
                         res->arr[j]=st1->cap;
                         res->type[j]=3;
                         res->size++;
+                        j++;
                         pop_back(st1);
+                        while(type>=type_of_element(st1->cap.operation) && st1->cap.operation!='('){
+                            res->arr[j]=st1->cap;
+                            res->type[j]=3;
+                            res->size++;
+                            pop_back(st1);
+                            j++;
+                        }
                         push_back(st1,expr->arr[i]);
                         st1->type[st1->size-1]=3;
-                        j++;
-                    }else{
-                        if(is_bracket(expr->arr[i].operation) && expr->arr[i].operation==')'){
-                            while(st1->cap.operation!='('){
-                                res->arr[j]=st1->cap;
-                                res->type[j]=3;
-                                res->size++;
-                                j++;
-                                pop_back(st1);
-                            }
+                    } else {
+                        if (type == cp && !is_bracket(expr->arr[i].operation)) {
+                            res->arr[j] = st1->cap;
+                            res->type[j] = 3;
+                            res->size++;
                             pop_back(st1);
-                            printf("");
-                        }else{
-                            push_back(st1,expr->arr[i]);
+                            push_back(st1, expr->arr[i]);
+                            st1->type[st1->size - 1] = 3;
+                            j++;
+                        } else {
+                            if (is_bracket(expr->arr[i].operation) && expr->arr[i].operation == ')') {
+                                while (st1->cap.operation != '(') {
+                                    res->arr[j] = st1->cap;
+                                    res->type[j] = 3;
+                                    res->size++;
+                                    j++;
+                                    pop_back(st1);
+                                }
+                                pop_back(st1);
+                            } else {
+                                push_back(st1, expr->arr[i]);
+                            }
                         }
                     }
                 }
@@ -365,7 +383,7 @@ int main(){
     char r[]="((((-12)+b*4)+5)+1)";
     char d[]="(3+4*2/(1-5)^2)";
     printf("%d !5 \n",correct_bracket(d));
-    m test=string_to_union_array("((3+x)*(4+y))");
+    m test=string_to_union_array("(26+(x*(5))+(3*x)+(5*3))");
     printf("%d !6\n",is_alpha('a'));
     print_union_array(test);
     printf("\n");
