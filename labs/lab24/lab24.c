@@ -61,7 +61,13 @@ void push_back(stack st,unon u){
 void pop_back(stack s){
     if(!is_empty_stack(s)){
         s->size--;
-        s->cap=s->data[s->size];
+        if(s->size!=0)
+            s->cap=s->data[s->size-1];
+        else{
+            unon temp;
+            temp.operation='&';
+            s->cap=temp;
+        }
     }
 }
 
@@ -300,18 +306,45 @@ m dijkstra(m expr){
             case 3:
                 if(is_empty_stack(st1)){
                     push_back(st1,expr->arr[i]);
-                    st1->type[st1->size-1]=type_of_element(expr->arr[i].operation);
+                    st1->type[st1->size-1]=3;
                 } else{
-                    pop_back(st1);
-                    //st1->type[st1->size-1]=type_of_element(expr->arr[i].operation);
+                    int type=type_of_element(expr->arr[i].operation);
+                    unon q=expr->arr[i];
+                    /*10 - скобки
+                     * 20 - (+ и -)
+                     * 30 - (* и /)
+                     * 40 - ^
+                     * */
+                    int cp=type_of_element(st1->cap.operation);
+                    if(type==cp && !is_bracket(expr->arr[i].operation)){
+                        res->arr[j]=st1->cap;
+                        res->type[j]=3;
+                        res->size++;
+                        pop_back(st1);
+                        push_back(st1,expr->arr[i]);
+                        st1->type[st1->size-1]=3;
+                        j++;
+                    }else{
+                        if(is_bracket(expr->arr[i].operation) && expr->arr[i].operation==')'){
+                            while(st1->cap.operation!='('){
+                                res->arr[j]=st1->cap;
+                                res->type[j]=3;
+                                res->size++;
+                                j++;
+                                pop_back(st1);
+                            }
+                            pop_back(st1);
+                            printf("");
+                        }else{
+                            push_back(st1,expr->arr[i]);
+                        }
+                    }
                 }
                 break;
             default:
                 break;
             /*T0D0
-             * нормально обработать пункт 3 для разных элементов 
-             * 
-             * 
+             * нормально обработать пункт 3 для разных элементов сделано????
              * */
         }
     }
@@ -329,9 +362,10 @@ int main(){
     printf("%d !3 \n",size_of_stack(st2));
     pop_back(st1);
     printf("%d !4 \n",size_of_stack(st2));
-    char r[]="(((-12)+b*4)+5)";
-    printf("%d !5 \n",correct_bracket(r));
-    m test=string_to_union_array(r);
+    char r[]="((((-12)+b*4)+5)+1)";
+    char d[]="(3+4*2/(1-5)^2)";
+    printf("%d !5 \n",correct_bracket(d));
+    m test=string_to_union_array("((3+x)*(4+y))");
     printf("%d !6\n",is_alpha('a'));
     print_union_array(test);
     printf("\n");
